@@ -19,6 +19,7 @@ import {PageConfig} from './page-config';
 import {debugLog} from '../utils/log';
 import {hasNextNodeInDocumentOrder} from '../utils/dom';
 import {tryParseJson} from '../utils/json';
+import {user} from '../utils/error-logger';
 
 const ALREADY_SEEN = '__SWG-SEEN__';
 const CONTROL_FLAG = 'subscriptions-control';
@@ -96,7 +97,9 @@ export class PageConfigResolver {
       this.configResolver_ = null;
     } else if (this.doc_.isReady()) {
       this.configResolver_(
-        Promise.reject(new Error('No config could be discovered in the page'))
+        Promise.reject(
+          user().createError('No config could be discovered in the page')
+        )
       );
       this.configResolver_ = null;
     }
